@@ -18,7 +18,7 @@ class File_maker
 
   def create_blank(extension)
     @target = @path+@username+'_'+@item+'_'+extension
-    File.open(target, 'w').close() if File.exists?(target)
+    File.open(@target, 'w').close() if File.exists?(@target)
   end
 
   def csv

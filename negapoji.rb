@@ -9,6 +9,8 @@ class Negapoji
   attr_reader :macab
   attr_reader :data
 
+  #KAIGYO = '/(\r\n|\r|\n|\f)/'
+
   def initialize(item, data)
     @item = item
     @mecab = Natto::MeCab.new
@@ -70,7 +72,7 @@ class Negapoji
     @today_events = self.set_today_events
     @analysis_result = Array.new
     @today_events.each do |sentence|
-      @sentence_chomped = sentence[@item].gsub(/(\r\n|\r|\n|\f)/,"")
+      @sentence_chomped = sentence[@item].gsub(/(\r\n|\r|\n|\f)/, "")
       @word_point_list = self.create_word_point_list(@sentence_chomped)
       @point = self.caluculate(@word_point_list)
       @analysis_result.push([sentence['date'], @sentence_chomped, @point]) unless @point.nil?
