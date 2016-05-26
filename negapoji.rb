@@ -32,12 +32,13 @@ module Negapoji
       mecab.parse(sentence) do |sentence_parsed|
         feature = sentence_parsed.feature.split(',')
         if hinshi_collected.include?(feature[0])
-          index = dictionary[:kanji].index(sentence_parsed.surface)
+          index = dictionary[:kanji].index(feature[6])
           unless index.nil? then
-            @word_point_list.push({word: sentence_parsed.surface, point: dictionary[:point][index]})
+            @word_point_list.push({word: feature[6], point: dictionary[:point][index]})
           end
         end
       end
+      p @word_point_list
       return @word_point_list
     end
 
@@ -47,5 +48,9 @@ module Negapoji
         the_day_point += word_point[:point].to_f
       end
       @result = the_day_point / word_point_list.count.to_i if the_day_point != 0
+    end
+
+    def negation_voting(word_point_list)
+
     end
 end
