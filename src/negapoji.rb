@@ -1,44 +1,40 @@
 # -*- coding:utf-8 -*-
 
 require 'natto'
+require './dictionary.rb'
+require './sentence.rb'
 
 module Negapoji
 
+  include Sentence
+
   def pointing(sentence)
-    @sentence_chomped = sentence.gsub(/(\r\n|\r|\n|\f)/, "")
-    @point = self.simple_voting(self.create_word_point_list(@sentence_chomped))
+    sentence_chomped = self.remove_kaigyo(sentence)
+    @point = self.simple_voting(self.create_word_point_list(sentence_chomped))
   end
 
   protected
-    def create_dictionary
-      File.open('./pn_ja.dic', 'r:utf-8') do |f|
-        @kanji, @kana, @hinshi, @point = Array.new, Array.new, Array.new, Array.new
-        while line = f.gets
-          content = line.split(':')
-          @kanji.push(content[0])
-          @kana.push(content[1])
-          @hinshi.push(content[2])
-          @point.push(content[3].chomp)
-        end
-      end
-      return {kanji: @kanji, kana: @kana, hinshi: @hinshi, point: @point}
+    def set_dictionary
+      dictionary = Dictionary.instance
+      dictionary.dictionary
     end
 
     def create_word_point_list(sentence)
-      mecab = Natto::MeCab.new
+      dictionary = self.set_dictionary
       @word_point_list = Array.new
-      dictionary = self.create_dictionary
+      mecab = Natto::MeCab.new
       hinshi_collected = ['名詞', '形容詞', '副詞', '動詞']
       mecab.parse(sentence) do |sentence_parsed|
         feature = sentence_parsed.feature.split(',')
         if hinshi_collected.include?(feature[0])
-          index = dictionary[:kanji].index(feature[6])
+          kanji = dictionary[:kanji].index(feature[6])
+          kana = dictionary[:kana].index(feature[6])
+          index = kanji.nil? ? kana : kanji
           unless index.nil? then
             @word_point_list.push({word: feature[6], point: dictionary[:point][index]})
           end
         end
       end
-      p @word_point_list
       return @word_point_list
     end
 

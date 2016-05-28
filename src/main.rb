@@ -3,10 +3,10 @@ require './file_maker.rb'
 require './mimamo_type.rb'
 require './negapoji.rb'
 
-INPUTS_NINCHI_PATH = './files/inputs/ninchi/'
-OUTPUTS_NINCHI_PATH = './files/outputs/ninchi/'
-INPUTS_DEPRESSION_PATH = './files/inputs/depression/'
-OUTPUTS_DEPRESSION_PATH = './files/outputs/depression/'
+INPUTS_NINCHI_PATH = '../files/inputs/ninchi/'
+OUTPUTS_NINCHI_PATH = '../files/outputs/ninchi/'
+INPUTS_DEPRESSION_PATH = '../files/inputs/depression/'
+OUTPUTS_DEPRESSION_PATH = '../files/outputs/depression/'
 
 DICTIONARY = './pn_ja.dic'
 
@@ -23,6 +23,7 @@ case mimamori_type
     p 'error:not supported with the arg'
     exit 0
 end
+
 files = Dir::entries(input)
 files.delete_if{|f| f == '.' || f == '..' || f == '.DS_Store'}
 
