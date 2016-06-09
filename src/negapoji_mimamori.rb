@@ -14,6 +14,7 @@ class Negapoji_mimamori
   def initialize(item, data)
     @item = item
     @data = data
+    super()
   end
 
   attr_reader :item
@@ -30,13 +31,13 @@ class Negapoji_mimamori
     return @sentence_list
   end
 
-  def create_correspondence_table_row(mimamori_type, sentence, point)
+  def create_correspondence_table_row(mimamori_type, sentence, point_takamura, point_inui_okazaki)
     sentence_chomped = self.remove_kaigyo(sentence[:item])
     case mimamori_type
     when Mimamo_type::NINCHI
-      @row = [sentence[:date], sentence_chomped, point]
+      @row = [sentence[:date], sentence_chomped, point_takamura, point_inui_okazaki]
     when Mimamo_type::DEPRESSION
-      @row = [sentence[:date], sentence_chomped, sentence[:feeling], point]
+      @row = [sentence[:date], sentence_chomped, sentence[:feeling], point_takamura, point_inui_okazaki]
     end
   end
 
@@ -44,8 +45,8 @@ class Negapoji_mimamori
     @correspondence_table = Array.new
     today_events = self.set_target_sentences
     today_events.each do |t|
-      point = TOKUNINASHI =~ t[:item] ? -0.3 : self.pointing(t[:item])
-      @correspondence_table.push(self.create_correspondence_table_row(mimamori_type, t, point))
+      point = TOKUNINASHI =~ t[:item] ? [-0.3, 0] : self.pointing(t[:item])
+      @correspondence_table.push(self.create_correspondence_table_row(mimamori_type, t, point[0], point[1]))
     end
     return @correspondence_table
   end

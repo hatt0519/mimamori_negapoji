@@ -1,5 +1,6 @@
 
 require 'csv'
+require 'json'
 
 class File_maker
 
@@ -28,5 +29,11 @@ class File_maker
     end
   end
 
+  def json
+    self.create_blank(__method__.to_s)
+    open(@target_file, 'w') do |json|
+      JSON.dump(@data, json)
+    end
+  end
 
 end
