@@ -74,7 +74,7 @@ module Negapoji
       word_point_list.each do |word_point|
         the_day_point += word_point[:point].to_f
       end
-      @result = the_day_point / word_point_list.count.to_i if the_day_point != 0
+      @result = the_day_point / word_point_list.count.to_i
     end
 
     def negation_voting(word_point_list)
