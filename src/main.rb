@@ -28,9 +28,12 @@ end
 db=DB.new('', '', '', '')
 users = db.get_users
 users.each do |user|
-  data = db.get_today_event(user['username'])
-  @file_maker = File_maker.new(data, user['username'], 'today_event', '../files/inputs/depression/')
-  @file_maker.json
+  data_today_event = db.get_today_event(user['username'])
+  data_current_status = db.get_current_status(user['username'])
+  @file_maker_today_event = File_maker.new(data_today_event, user['username'], 'today_event', '../files/inputs/depression/')
+  @file_maker_current_status = File_maker.new(data_current_status, user['username'], 'current_status', '../files/inputs/depression/')
+  @file_maker_today_event.json
+  @file_maker_current_status.json
 end
 
 files = Dir::entries(input)
@@ -39,17 +42,20 @@ files.each do |username|
   negapoji_good = Negapoji_mimamori.new('good', input+username+'/today_event.json')
   negapoji_bad = Negapoji_mimamori.new('bad', input+username+'/today_event.json')
   negapoji_reference = Negapoji_mimamori.new('reference', input+username+'/today_event.json')
+  negapoji_current_status = Negapoji_mimamori.new('current_status', input+username+'/current_status.json')
 
   good_sentence = negapoji_good.create_correspondence_table(mimamori_type)
   bad_sentence = negapoji_bad.create_correspondence_table(mimamori_type)
   reference_sentence = negapoji_reference.create_correspondence_table(mimamori_type)
+  current_status_sentence = negapoji_current_status.create_correspondence_table(mimamori_type)
 
   file_maker_good = File_maker.new(good_sentence, username, 'good', output)
   file_maker_bad = File_maker.new(bad_sentence, username, 'bad', output)
   file_maker_reference = File_maker.new(reference_sentence, username, 'reference', output)
+  file_maker_current_status = File_maker.new(current_status_sentence, username, 'current_status', output)
 
   file_maker_good.csv
   file_maker_bad.csv
   file_maker_reference.csv
-
+  file_maker_current_status.csv
 end

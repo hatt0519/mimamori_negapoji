@@ -21,11 +21,11 @@ class Negapoji_mimamori
   attr_reader :data
 
   def set_target_sentences
-    today_events = JSON.load(open(@data).read)
+    sentences = JSON.load(open(@data).read)
     @sentence_list = Array.new
-    today_events.each do |t|
-      feeling = t.include?('feeling') ? t['feeling'] : ''
-      content = {date: t['date'], item: t[@item], feeling: feeling}
+    sentences.each do |s|
+      feeling = s.include?('feeling') ? s['feeling'] : ''
+      content = {date: s['date'], item: s[@item], feeling: feeling}
       @sentence_list.push(content)
     end
     return @sentence_list
@@ -43,10 +43,10 @@ class Negapoji_mimamori
 
   def create_correspondence_table(mimamori_type)
     @correspondence_table = Array.new
-    today_events = self.set_target_sentences
-    today_events.each do |t|
-      point = TOKUNINASHI =~ t[:item] ? [-0.3, 0] : self.pointing(t[:item])
-      @correspondence_table.push(self.create_correspondence_table_row(mimamori_type, t, point[0], point[1]))
+    sentence_list = self.set_target_sentences
+    sentence_list.each do |s|
+      point = TOKUNINASHI =~ s[:item] ? [-0.3, 0] : self.pointing(s[:item])
+      @correspondence_table.push(self.create_correspondence_table_row(mimamori_type, s, point[0], point[1]))
     end
     return @correspondence_table
   end
