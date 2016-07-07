@@ -25,27 +25,29 @@ class Dictionary
   end
 
   def create_pn_wago_verbs_and_adjectives
-    point, word = Array.new, Array.new
+    point, view, word = Array.new, Array.new, Array.new
     File.open('../dic/wago.121808.pn', 'r:utf-8') do |f|
       while line = f.gets
         content = line.split(',')
         point.push(content[0])
+        view.push(content[1])
         word.push(content[2].chomp)
       end
     end
-    {word: word, point: point}
+    {word: word, point: point, view: view}
   end
 
   def create_pn_wago_nouns
-    point, word = Array.new, Array.new
+    point, view, word = Array.new, Array.new, Array.new
     File.open('../dic/pn.csv.m3.120408.trim', 'r:utf-8') do |f|
       while line = f.gets
         content = line.split(',')
         word.push(content[0])
         point.push(content[1])
+        view.push(content[3])
       end
     end
-    @pn_wago_nouns = {word: word, point: point}
+    {word: word, point: point, view: view}
   end
 
   attr_reader :pn_table

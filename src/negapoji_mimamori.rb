@@ -38,6 +38,8 @@ class Negapoji_mimamori
       @row = [sentence[:date], sentence_chomped, point_takamura, point_inui_okazaki]
     when Mimamo_type::DEPRESSION
       @row = [sentence[:date], sentence_chomped, sentence[:feeling], point_takamura, point_inui_okazaki]
+    when Mimamo_type::VIEW
+      @row = [sentence[:date], sentence_chomped, sentence[:feeling], point_inui_okazaki]
     end
   end
 

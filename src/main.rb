@@ -8,6 +8,7 @@ INPUTS_NINCHI_PATH = '../files/inputs/ninchi/'
 OUTPUTS_NINCHI_PATH = '../files/outputs/ninchi/'
 INPUTS_DEPRESSION_PATH = '../files/inputs/depression/'
 OUTPUTS_DEPRESSION_PATH = '../files/outputs/depression/'
+OUTPUTS_VIEW_PATH = '../files/outputs/view/'
 
 DICTIONARY = './pn_ja.dic'
 
@@ -20,6 +21,9 @@ case mimamori_type
   when Mimamo_type::DEPRESSION
     input = INPUTS_DEPRESSION_PATH
     output = OUTPUTS_DEPRESSION_PATH
+  when Mimamo_type::VIEW
+    input = INPUTS_DEPRESSION_PATH
+    output = OUTPUTS_VIEW_PATH
   else
     p 'error:not supported with the arg'
     exit 0
@@ -35,6 +39,7 @@ users.each do |user|
   @file_maker_today_event.json
   @file_maker_current_status.json
 end
+
 
 files = Dir::entries(input)
 files.delete_if{|f| f == '.' || f == '..' || f == '.DS_Store'}
@@ -58,4 +63,5 @@ files.each do |username|
   file_maker_bad.csv
   file_maker_reference.csv
   file_maker_current_status.csv
+
 end

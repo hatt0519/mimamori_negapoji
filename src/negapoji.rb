@@ -18,7 +18,7 @@ module Negapoji
 
   def pointing(sentence)
     sentence_chomped = self.remove_kaigyo(sentence)
-    @point = [self.simple_voting(self.takamura(sentence_chomped)), self.simple_voting(self.inui_okazaki(sentence_chomped))]
+    @point = [self.simple_voting(self.takamura(sentence_chomped)), self.simple_voting(self.judge_subjective_or_objective(sentence_chomped))]
   end
 
   def takamura(sentence)
@@ -52,6 +52,23 @@ module Negapoji
     return word_point_list
   end
 
+  def judge_subjective_or_objective(sentence)
+    word_point_list = Array.new
+    subjective = ["主観", "（評価）"]
+    @mecab.parse(sentence) do |sentence_parsed|
+      feature = sentence_parsed.feature.split(',')
+      if @hinshi_collected.include?(feature[0])
+        pn = feature[0] == "名詞" ? @pn_wago_nouns : @pn_wago_verbs_and_adjectives
+        index = pn[:word].index(feature[6])
+        unless index.nil? then
+          point = subjective.include?(pn[:view][index]) ? -1 : 1
+          word_point_list.push({word: feature[6], point: point})
+        end
+      end
+    end
+    return word_point_list
+  end
+
   protected
 
     def set_pn_table
@@ -77,7 +94,4 @@ module Negapoji
       @result = the_day_point == 0 ? the_day_point : the_day_point/ word_point_list.count.to_i
     end
 
-    def negation_voting(word_point_list)
-
-    end
 end
